@@ -158,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setLanguage(currentLang);
     initScrollEffects();
     initCounters();
+    initMobileMenu();
 });
 
 // Switcher UI
@@ -181,6 +182,48 @@ function initLangSelector() {
             setLanguage(lang);
         });
     });
+}
+
+function initMobileMenu() {
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const desktopNav = document.querySelector('.desktop-nav');
+    
+    if(mobileBtn && desktopNav) {
+        mobileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            desktopNav.classList.toggle('active');
+            
+            // Toggle icon
+            const icon = mobileBtn.querySelector('i');
+            if(desktopNav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if(!desktopNav.contains(e.target) && desktopNav.classList.contains('active')) {
+                desktopNav.classList.remove('active');
+                const icon = mobileBtn.querySelector('i');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu when clicking a link
+        desktopNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                desktopNav.classList.remove('active');
+                const icon = mobileBtn.querySelector('i');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            });
+        });
+    }
 }
 
 function setLanguage(lang) {
